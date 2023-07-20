@@ -50,9 +50,8 @@ def process():
     face_pixels = extract_face_from_file("static/result.png")
     face_image = Image.fromarray(face_pixels)
     face_image.save("static/face_image.png")
-    
 
-    return render_template('result.html')
+    return get_data()
 
 def get_data():
     data={
