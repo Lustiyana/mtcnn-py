@@ -19,13 +19,13 @@ def home():
     return render_template('index.html')
 
 
-def extract_face_from_file(filename, required_size=(160, 160)):
-    image = Image.open(filename)
-    return extract_face(image, required_size)
+def extract_face_from_image(img, required_size=(224, 224)):
+    face_pixels = np.array(img)
+    return extract_face(face_pixels, required_size)
 
-def extract_face(image, required_size=(160, 160)):
+def extract_face(image, required_size=(224, 224)):
     detector = MTCNN()
-    image = image.convert('RGB')
+    # image = image.convert('RGB')
     pixels = np.asarray(image)
     results = detector.detect_faces(pixels)
 
@@ -73,24 +73,27 @@ def process():
     
     image = request.files['image']
     img = Image.open(image)
-    plt.imshow(img)
-    plt.axis('off')
-    plt.savefig('static/result.png')
-    plt.close()
-    face_pixels = extract_face_from_file("static/result.png")
-    face_image = Image.fromarray(face_pixels)
-    face_image.save("static/face_image.png")
+    # face_pixels = extract_face_from_image(img)
+    # face_pixels_rgb = cv2.cvtColor(face_pixels, cv2.COLOR_GRAY2RGB)
+    # face_image = Image.fromarray(face_pixels_rgb)
+    try:
+        face_pixels = extract_face_from_image(img)
+        face_pixels_rgb = cv2.cvtColor(face_pixels, cv2.COLOR_GRAY2RGB)
+        face_image = Image.fromarray(face_pixels_rgb)
+        if 'image' not in request.files:
+            return jsonify({'error': 'No image uploaded'}), 400
 
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image uploaded'}), 400
+        x = keras_img.img_to_array(face_image)
+        x = np.expand_dims(x, axis=0)
+        images = np.vstack([x])
+        pred = model.predict(images, batch_size=32)
+        predicted_class = class_labels[np.argmax(pred)]
+        return jsonify({'prediction': predicted_class, 'success':True})
+    except Exception:
+        return jsonify({'error': 'Absen gagal! Tidak ada wajah yang terdeteksi, coba lagi', 'success': False})
 
-    img = keras_img.load_img("static/face_image.png", target_size=(224,224,3))
-    x = keras_img.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    images = np.vstack([x])
-    pred = model.predict(images, batch_size=32)
-    predicted_class = class_labels[np.argmax(pred)]
-    return jsonify({'prediction': predicted_class})
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True, port=8001)
