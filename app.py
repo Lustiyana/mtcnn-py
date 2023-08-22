@@ -93,7 +93,5 @@ def process():
         return jsonify({'error': 'Absen gagal! Tidak ada wajah yang terdeteksi, coba lagi', 'success': False})
 
 
-    
-
 if __name__ == '__main__':
     app.run(debug=True, port=8001)
