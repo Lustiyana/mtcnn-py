@@ -45,9 +45,10 @@ def extract_face(image, required_size=(224, 224)):
 
 @app.route('/process', methods=['POST'])
 def process():
-    form_data = request.form
-    specific_key = form_data.get('classes') 
-    class_labels= specific_key.split(';')
+    # form_data = request.form
+    # specific_key = form_data.get('classes') 
+    # class_labels= specific_key.split(';')
+    class_labels = ['Adi Pratama Putra', 'Afrinaldi', 'Aka Fadila', 'Alia Fadhila', 'Ammar Taradifa', 'Andi Malia Fadilah Bahari', 'Arief Raihan Nur Rahman', 'Arif Muhamad Iqbal ', 'Ashrul Nasrulloh', 'Azhar', 'Aziz Nuzul Praramadhana', 'Bella Arsylia ', 'Elis Kartika', 'Faiq Fadhlurrahman El Hakim', 'Farhan Rizky', 'Fawzan Ibnu Fajar', 'Fellia Ayu S A', 'Gani', 'Hilman Suhendar', 'Ifany Dewi Tustianti', 'Ilham Rizky Agustin ', 'Imam Firdaus', 'Indah Sri Lestari', 'Indri Nurfiani', 'Intan Permata Sari', 'Iqbal Putra Ramadhan', 'Jalalul', 'Laela Chintia Alviani ', 'Lustiyana', 'Moch Apip Tanuwijaya', 'Moch Arsyil Albany', 'Mochamad Najib Budi Noosrsyahbannie', 'Muhamad Farid Fauzi', 'Muhamad Iqbal Setiawan', 'Muhamad Rizki Isa Darmawan', 'Muhammad Afian Anwar', 'Muhammad Alwy Solehudin', 'Muhammad Fahmi Rizaldi Ilham', 'Muhammad Gilang Nur Haliz', 'Mujahid Ansori Majid', 'Naufal Rizqullah', 'Nurdila Farha Kamila', 'Nurul Aulia Dewi', 'Raihan Adam', 'Rifaldo Sukma Hidayat', 'Siti Haerani', 'Siti Yayah Rokayah ', 'Soniawan', 'fahriz']
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size = (3, 3), activation='relu', input_shape=(224,224,3)))
