@@ -12,6 +12,10 @@ from keras.models import Sequential
 from keras.layers import Conv2D,MaxPooling2D,Dense,Flatten,Dropout, BatchNormalization
 from keras_preprocessing import image as keras_img
 import urllib.request
+from urllib.request import urlopen
+import ssl
+import json
+ssl._create_default_https_context = ssl._create_unverified_context
 
 app = Flask(__name__)
 
@@ -124,11 +128,11 @@ def image_checking():
 
     result = []
     for image_path2 in image_array:
-        # if are_images_equal(image_path1, image_path2):
-        #     result.append(True)
-        # else:
-        #     result.append(False)
-        result.append(are_images_equal(image_path1, image_path2))
+        if are_images_equal(image_path1, image_path2):
+            result.append(True)
+        else:
+            result.append(False)
+        # result.append(are_images_equal(image_path1, image_path2))
 
 
     if any(result):
