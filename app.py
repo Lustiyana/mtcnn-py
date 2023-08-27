@@ -15,6 +15,7 @@ import urllib.request
 from urllib.request import urlopen
 import ssl
 import json
+from io import BytesIO
 ssl._create_default_https_context = ssl._create_unverified_context
 
 app = Flask(__name__)
@@ -101,9 +102,10 @@ def process():
 
 
 def are_images_equal(image_path1, image_path2):
-    urllib.request.urlretrieve(image_path2, 'image.jpeg')
+    with urllib.request.urlopen(image_path2) as response:
+        image_data = response.read()
     image1 = Image.open(image_path1)
-    image2 = Image.open('image.jpeg')
+    image2 = Image.open(BytesIO(image_data))
 
     if image1.size != image2.size:
         return False
