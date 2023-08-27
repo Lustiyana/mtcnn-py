@@ -130,11 +130,7 @@ def image_checking():
 
     result = []
     for image_path2 in image_array:
-        if are_images_equal(image_path1, image_path2):
-            result.append(True)
-        else:
-            result.append(False)
-        # result.append(are_images_equal(image_path1, image_path2))
+        result.append(are_images_equal(image_path1, image_path2))
 
 
     if any(result):
